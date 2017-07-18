@@ -224,6 +224,12 @@ for theme in dict_namespertheme :
    
 superpersona_pertheme = defaultdict(list)
 
+file_list1 = []
+a = map(lambda x : check(x.lower()), totalnamefinal)
+file_list1 = zip(file_list1, range(len(file_list1)))
+cv_jsonfinal = map(remove_exp, file_list1)
+file_listofjsons_people = file_listofjsons
+
     
 for key, value in finaldict.iteritems(): 
     if len(value) != 0 : 
@@ -235,6 +241,7 @@ for key, value in finaldict.iteritems():
 #         desc =  desc.encode('utf8', 'replace')
                     superpersona_pertheme[key].append(desc)
    
+
 
 for key,value in superpersona_pertheme.iteritems() : 
    superpersona_pertheme[key] = "".join(value) 
