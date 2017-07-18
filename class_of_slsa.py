@@ -41,7 +41,7 @@ class LSA(object):
                 self.wdict[w] = [self.dcount]
         self.dcount += 1      
     def build(self): # Create count matrix
-        self.keys = [k for k in self.wdict.keys() if len(self.wdict[k]) > 1]
+        self.keys = [k for k in self.wdict.keys()]
         self.keys.sort()
         self.A = zeros([len(self.keys), self.dcount])
         for i, k in enumerate(self.keys):
@@ -83,6 +83,7 @@ class LSA(object):
         print 'Vt matrix: '
         print -1*self.Vt[0:3, :]
 
+import numpy as np
 def projectnewdoc(query1, docs, eigs): # core comparison function. 
     hello = LSA(stopwords, ignore_characters)
     query1 = superpersona_pertheme['Banca']
@@ -93,12 +94,12 @@ def projectnewdoc(query1, docs, eigs): # core comparison function.
     hello.calc()
     hello.findincommon(query1)
     newvec = hello.returnNewvec()
-    newvec = transpose(newvec)
+    newvec = np.matrix(newvec)
     U = hello.returnU()
     S = hello.returnS()
     S[list(eigs)] = 0
     S = diag(hello.S)
-    vector_projected =(dot(newvec,U))*inv(S)
+    vector_projected =(dot(newvec, U))*np.linalg.pinv(S)
     return vector_projected
 
 def whichisclosest(query, docs): 
@@ -108,8 +109,7 @@ def whichisclosest(query, docs):
     lsa.build()
     lsa.calc()
     Vt = lsa.Vt
-    vectors =[(dot(query,Vt[:,0]),dot(query,Vt[:,i])) for i in range(len(Vt))]
-    vectors = vectors[1:]
+    vectors =[dot(query,Vt[:,i]) for i in range(len(Vt))]
     whichdoc_index = vectors.index(max(vectors))
     difference = 1-max(vectors)
     return whichdoc_index, difference
@@ -122,11 +122,12 @@ listofcombos = list(itertools.combinations(indeces, 3))
 thebest = 100000
 besteigs = [0,0,0]
 for each in listofcombos:
-    if sum < thebest:
-        thebest = sum
-        best_eigs = each
     for person in superpersona_pertheme : 
+        sumresult = 0
         newvector = projectnewdoc(person, titlespertheme_list, each)
         a,b = whichisclosest(newvector, titlespertheme_list)
-        sum = sum + b
+        sumresult = sumresult + b
+        if sumresult < thebest:
+            thebest = sumresult
+            best_eigs = each
 
