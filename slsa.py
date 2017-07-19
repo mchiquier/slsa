@@ -14,8 +14,11 @@ import parseLinkedin as pl
 #import glob
 from datetime import datetime
 
+global file_list1 
 file_list1 = []
+global file_list2 
 file_list2 = []
+global file_listofjsons
 file_listofjsons = []
 
 #dir_name = 'Q:/Analytics/Proyectos/publications/output/linkedin/linkedin_escuela'
@@ -215,20 +218,14 @@ for theme in dict_namespertheme :
     for index in range(len(file_list0)) : 
         file_list0[index] = file_list0[index].lower()
     a = map(check, file_list0)
-    
     file_list1 = zip(file_list1, range(len(file_list1)))
-   # b = map(extract_studentlol, file_list1)
-    # file_list2n = zip(file_list2, range(len(file_list2)))
-    cv_json = map(remove_exp,file_list1)
+
+    b = map(extract_studentlol, file_list1)
+    file_list2n = zip(file_list2, range(len(file_list2)))
+    cv_json = map(remove_exp,file_list2n)
     finaldict[theme] = file_listofjsons
    
 superpersona_pertheme = defaultdict(list)
-
-file_list1 = []
-a = map(lambda x : check(x.lower()), totalnamefinal)
-file_list1 = zip(file_list1, range(len(file_list1)))
-cv_jsonfinal = map(remove_exp, file_list1)
-file_listofjsons_people = file_listofjsons
 
     
 for key, value in finaldict.iteritems(): 
